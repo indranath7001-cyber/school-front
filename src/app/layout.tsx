@@ -18,7 +18,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 // Canonical production URL — used for metadataBase, sitemap, OG, robots
-const SITE_URL = "https://starsoftwares.in";
+const SITE_URL = "https://school.starsoftwares.in";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -111,7 +111,7 @@ export const metadata: Metadata = {
   other: {
     // Search engine verification placeholders — replace with real keys from
     // Google Search Console / Bing Webmaster Tools when available
-    "google-site-verification": "GOOGLE_VERIFICATION_TOKEN",
+    "google-site-verification": "yaagfYgO6i7xjVP026gZ-NcnuDSSjVYshzbTGScr8g4",
     "msvalidate.01": "BING_VERIFICATION_TOKEN",
   },
 };
