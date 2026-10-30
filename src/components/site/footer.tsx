@@ -187,8 +187,8 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="https://starsoftwares.in" className="flex items-center gap-2.5 text-sm text-white/70 hover:text-white">
-                  <Globe className="h-4 w-4 text-brand-teal" /> starsoftwares.in
+                <a href="https://school.starsoftwares.in" className="flex items-center gap-2.5 text-sm text-white/70 hover:text-white">
+                  <Globe className="h-4 w-4 text-brand-teal" /> school.starsoftwares.in
                 </a>
               </li>
             </ul>

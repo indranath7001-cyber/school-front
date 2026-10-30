@@ -125,7 +125,7 @@ export function Hero() {
             <div className="relative overflow-hidden rounded-[1.75rem] shadow-card-hover ring-1 ring-black/5">
               <img
                 src="/images/hero-classroom.png"
-                alt="Happy Indian school students learning with a friendly teacher in a modern classroom"
+                alt="Happy Indian school students learning with a friendly teacher in a modern classroom using Star Softwares School ERP"
                 className="h-[340px] w-full object-cover sm:h-[440px] lg:h-[500px]"
                 loading="eager"
               />

@@ -18,6 +18,7 @@ const ROLES = [
     desc: "Centralized operational visibility, admissions, financial oversight, reporting, staff management, and configured system controls.",
     tint: "from-brand-blue to-brand-blue-light",
     img: "/images/admin-desk.png",
+    alt: "School administrator using Star Softwares School ERP dashboard for centralized administration",
   },
   {
     icon: GraduationCap,
@@ -25,6 +26,7 @@ const ROLES = [
     desc: "Academic planning, timetables, attendance, assignments, examinations, learning resources, and student records.",
     tint: "from-brand-teal to-brand-teal-light",
     img: "/images/students-reading.png",
+    alt: "Indian teacher with students using the School ERP teacher portal for academic planning",
   },
   {
     icon: Backpack,
@@ -32,6 +34,7 @@ const ROLES = [
     desc: "A convenient digital destination for homework, classwork, study materials, notices, examinations, and results.",
     tint: "from-brand-orange to-brand-amber",
     img: "/images/digital-learning.png",
+    alt: "Indian school students using the digital learning LMS portal on tablets and laptops",
   },
   {
     icon: Users,
@@ -39,6 +42,7 @@ const ROLES = [
     desc: "A connected view of attendance, fees, academic updates, notices, and supported school-transport information.",
     tint: "from-violet-500 to-violet-400",
     img: "/images/parent-portal.png",
+    alt: "Indian parents checking their child's school updates on the parent portal smartphone app",
   },
 ];
 
@@ -60,7 +64,7 @@ export function UserExperiences() {
                 <div className="relative h-36 overflow-hidden">
                   <img
                     src={r.img}
-                    alt={r.title}
+                    alt={r.alt}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                   />
