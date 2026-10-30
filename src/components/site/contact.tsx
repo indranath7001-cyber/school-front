@@ -13,6 +13,7 @@ import {
   Clock,
   MessageSquare,
   GraduationCap,
+  AlertCircle,
 } from "lucide-react";
 import { Reveal } from "./reveal";
 import { Button } from "@/components/ui/button";
@@ -36,7 +37,7 @@ const waLink = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_TEXT)}`;
 const CONTACTS = [
   { icon: Phone, label: "Call us", value: "+91 70032 16162", href: "tel:+917003216162" },
   { icon: Mail, label: "Email us", value: "softwaresstar@gmail.com", href: "mailto:softwaresstar@gmail.com" },
-  { icon: Globe, label: "Visit", value: "starsoftwares.in", href: "https://starsoftwares.in" },
+  { icon: Globe, label: "Visit", value: "school.starsoftwares.in", href: "https://school.starsoftwares.in" },
   { icon: MapPin, label: "Based in", value: "India", href: "#" },
 ];
 
@@ -44,6 +45,7 @@ export function Contact() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -60,23 +62,33 @@ export function Contact() {
     };
 
     setLoading(true);
+    setErrorMsg(null);
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error("Request failed");
+      if (!res.ok) {
+        let detail = "Please try again.";
+        try {
+          const body = await res.json();
+          if (body?.error) detail = body.error;
+        } catch {}
+        throw new Error(detail);
+      }
       setDone(true);
       toast({
         title: "Demo request received!",
         description: "Our team will reach out to you shortly.",
       });
       form.reset();
-    } catch {
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Please try again.";
+      setErrorMsg(msg);
       toast({
-        title: "Something went wrong",
-        description: "Please try again or email us directly.",
+        title: "Could not send request",
+        description: msg + " You can also WhatsApp us at +91 70032 16162.",
         variant: "destructive",
       });
     } finally {
@@ -189,6 +201,24 @@ export function Contact() {
                     <h3 className="font-display text-lg font-bold text-brand-navy">Request your free demo</h3>
                   </div>
 
+                  {/* WhatsApp hint — placed at top so it never interferes with submit */}
+                  <a
+                    href={waLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="sm:col-span-2 flex items-center gap-3 rounded-xl bg-[#25D366]/10 p-3 ring-1 ring-[#25D366]/25 transition-colors hover:bg-[#25D366]/15"
+                  >
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#25D366] text-white">
+                      <svg viewBox="0 0 32 32" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+                        <path d="M16.003 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.257.592 4.46 1.713 6.402L3.2 28.8l6.608-1.732a12.74 12.74 0 0 0 6.195 1.572h.005c7.06 0 12.8-5.74 12.8-12.8C28.808 8.94 23.063 3.2 16.003 3.2zm5.826 15.098c-.319-.16-1.886-.93-2.176-1.036-.292-.107-.505-.16-.717.16-.213.32-.825 1.036-1.012 1.249-.186.213-.373.24-.692.08-.32-.16-1.35-.498-2.572-1.587-.95-.848-1.593-1.895-1.78-2.214-.186-.32-.02-.493.14-.652.144-.143.32-.373.48-.56.16-.186.213-.32.32-.533.107-.213.053-.4-.027-.56-.08-.16-.717-1.727-.982-2.364-.259-.62-.521-.536-.717-.546l-.61-.01c-.213 0-.56.08-.853.4-.293.32-1.12 1.094-1.12 2.665 0 1.57 1.146 3.087 1.306 3.3.16.213 2.253 3.44 5.456 4.823.762.329 1.357.525 1.82.672.765.243 1.461.209 2.011.127.613-.091 1.886-.771 2.152-1.516.266-.745.266-1.384.186-1.517-.08-.133-.293-.213-.613-.373z" />
+                      </svg>
+                    </span>
+                    <p className="text-xs font-medium text-brand-navy">
+                      <strong>Prefer WhatsApp?</strong> Enquiries are best sent there — fastest response. {""}
+                      <span className="font-bold text-[#1da851] underline">Chat now →</span>
+                    </p>
+                  </a>
+
                   <Field label="Full Name *">
                     <Input id="name" name="name" placeholder="e.g. Rajesh Sharma" required />
                   </Field>
@@ -241,22 +271,24 @@ export function Contact() {
                     </Field>
                   </div>
 
-                  <div className="sm:col-span-2 flex flex-col gap-3 rounded-xl bg-[#25D366]/10 p-3.5 ring-1 ring-[#25D366]/25 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-xs font-medium text-brand-navy">
-                      💬 <strong>Prefer WhatsApp?</strong> Enquiries are best sent there — fastest response.
-                    </p>
-                    <a
-                      href={waLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-95"
-                    >
-                      <svg viewBox="0 0 32 32" className="h-4 w-4" fill="currentColor" aria-hidden="true">
-                        <path d="M16.003 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.257.592 4.46 1.713 6.402L3.2 28.8l6.608-1.732a12.74 12.74 0 0 0 6.195 1.572h.005c7.06 0 12.8-5.74 12.8-12.8C28.808 8.94 23.063 3.2 16.003 3.2zm5.826 15.098c-.319-.16-1.886-.93-2.176-1.036-.292-.107-.505-.16-.717.16-.213.32-.825 1.036-1.012 1.249-.186.213-.373.24-.692.08-.32-.16-1.35-.498-2.572-1.587-.95-.848-1.593-1.895-1.78-2.214-.186-.32-.02-.493.14-.652.144-.143.32-.373.48-.56.16-.186.213-.32.32-.533.107-.213.053-.4-.027-.56-.08-.16-.717-1.727-.982-2.364-.259-.62-.521-.536-.717-.546l-.61-.01c-.213 0-.56.08-.853.4-.293.32-1.12 1.094-1.12 2.665 0 1.57 1.146 3.087 1.306 3.3.16.213 2.253 3.44 5.456 4.823.762.329 1.357.525 1.82.672.765.243 1.461.209 2.011.127.613-.091 1.886-.771 2.152-1.516.266-.745.266-1.384.186-1.517-.08-.133-.293-.213-.613-.373z" />
-                      </svg>
-                      Chat on WhatsApp
-                    </a>
-                  </div>
+                  {/* Error banner */}
+                  {errorMsg && (
+                    <div className="sm:col-span-2 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4">
+                      <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />
+                      <div className="text-sm leading-relaxed text-red-800">
+                        <strong>Could not send your request.</strong> {errorMsg}{" "}
+                        You can also WhatsApp us directly at{" "}
+                        <a href={waLink} target="_blank" rel="noopener noreferrer" className="font-bold underline">
+                          +91 70032 16162
+                        </a>{" "}
+                        or email{" "}
+                        <a href="mailto:softwaresstar@gmail.com" className="font-bold underline">
+                          softwaresstar@gmail.com
+                        </a>
+                        .
+                      </div>
+                    </div>
+                  )}
 
                   <div className="sm:col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <p className="text-xs text-muted-foreground">
